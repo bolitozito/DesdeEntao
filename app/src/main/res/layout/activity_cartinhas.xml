@@ -15,140 +15,192 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/background" />
+        app:srcCompat="@drawable/background"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/textView5"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="25dp"
         android:fontFamily="cursive"
         android:text="Cartinhas para tu!"
+        android:textAlignment="center"
         android:textColor="@color/colorPrimaryDark"
-        android:textSize="30sp"
+        android:textSize="36sp"
         app:layout_constraintBottom_toTopOf="@+id/scrollView2"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        tools:layout_constraintLeft_creator="1"
+        tools:layout_constraintRight_creator="1" />
 
     <ScrollView
-        android:layout_width="369dp"
-        android:layout_height="492dp"
-        android:layout_marginRight="8dp"
-        app:layout_constraintRight_toRightOf="parent"
+        android:id="@+id/scrollView2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
-        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="50dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="8dp"
-        android:id="@+id/scrollView2">
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView5"
+        tools:layout_constraintLeft_creator="1"
+        tools:layout_constraintRight_creator="1">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <Button
-                android:id="@+id/button10"
+                android:id="@+id/btnPrimeira"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="70dp"
                 android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"
+                android:background="@color/colorPrimary"
+                android:backgroundTint="@color/colorPrimary"
+                android:onClick="onPrimeira"
                 android:paddingBottom="5dp"
                 android:paddingTop="5dp"
-                android:text="Button" />
+                android:text="♥ Abra quando usar o app pela primeira vez!!"
+                android:textAppearance="@style/TextAppearance.AppCompat"
+                android:textSize="18sp" />
 
             <Button
-                android:id="@+id/button9"
+                android:id="@+id/btnDesenho"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="70dp"
                 android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"
+                android:backgroundTint="@color/colorPrimary"
+                android:onClick="onDesenho"
                 android:paddingBottom="5dp"
                 android:paddingTop="5dp"
-                android:text="Button" />
+                android:text="♥ Abra quando quiser uma inspiração de desenho!"
+                android:textAppearance="@style/TextAppearance.AppCompat"
+                android:textSize="18sp" />
 
             <Button
-                android:id="@+id/button8"
+                android:id="@+id/btnDoente"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="70dp"
                 android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"
+                android:backgroundTint="@color/colorPrimary"
+                android:onClick="onDoente"
                 android:paddingBottom="5dp"
                 android:paddingTop="5dp"
-                android:text="Button" />
+                android:text="♥ Abra quando estiver doentinho!"
+                android:textAppearance="@style/TextAppearance.AppCompat"
+                android:textSize="18sp" />
 
             <Button
-                android:id="@+id/button7"
+                android:id="@+id/btnFeio"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="70dp"
                 android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"
+                android:backgroundTint="@color/colorPrimary"
+                android:onClick="onFeio"
                 android:paddingBottom="5dp"
                 android:paddingTop="5dp"
-                android:text="Button" />
+                android:text="♥ Abra quando se sentir feio"
+                android:textAppearance="@style/TextAppearance.AppCompat"
+                android:textSize="18sp" />
 
             <Button
-                android:id="@+id/button6"
+                android:id="@+id/btnOrgulhoso"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="70dp"
                 android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"
+                android:backgroundTint="@color/colorPrimary"
+                android:onClick="onOrgulhoso"
                 android:paddingBottom="5dp"
                 android:paddingTop="5dp"
-                android:text="Button" />
+                android:text="♥ Abra quando estiver se sentindo orgulhoso!"
+                android:textAppearance="@style/TextAppearance.AppCompat"
+                android:textSize="18sp" />
 
             <Button
-                android:id="@+id/button5"
+                android:id="@+id/btnTriste"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="70dp"
                 android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"
+                android:backgroundTint="@color/colorPrimary"
+                android:onClick="onTriste"
                 android:paddingBottom="5dp"
                 android:paddingTop="5dp"
-                android:text="Button" />
+                android:text="♥ Abra se estiver triste"
+                android:textAppearance="@style/TextAppearance.AppCompat"
+                android:textSize="18sp" />
 
             <Button
-                android:id="@+id/button4"
+                android:id="@+id/btnCuriosidade"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="70dp"
                 android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"
+                android:backgroundTint="@color/colorPrimary"
+                android:onClick="onCuriosidade"
                 android:paddingBottom="5dp"
                 android:paddingTop="5dp"
-                android:text="Button" />
+                android:text="♥ Abra por curiosidade"
+                android:textAppearance="@style/TextAppearance.AppCompat"
+                android:textSize="18sp" />
 
             <Button
-                android:id="@+id/button3"
+                android:id="@+id/btnAmo"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="70dp"
                 android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"
+                android:backgroundTint="@color/colorPrimary"
+                android:onClick="onAmo"
                 android:paddingBottom="5dp"
                 android:paddingTop="5dp"
-                android:text="Button" />
+                android:text="♥ Abra quando quiser saber o quanto eu te amo!"
+                android:textAppearance="@style/TextAppearance.AppCompat"
+                android:textSize="18sp" />
 
             <Button
-                android:id="@+id/button2"
+                android:id="@+id/btnSaudades"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="70dp"
                 android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"
+                android:backgroundTint="@color/colorPrimary"
+                android:onClick="onSaudades"
                 android:paddingBottom="5dp"
                 android:paddingTop="5dp"
-                android:text="Button" />
+                android:text="♥ Abra quando sentir saudade!"
+                android:textAppearance="@style/TextAppearance.AppCompat"
+                android:textSize="18sp" />
 
             <Button
-                android:id="@+id/button"
+                android:id="@+id/btnApp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="70dp"
                 android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"
+                android:backgroundTint="@color/colorPrimary"
+                android:onClick="onApp"
                 android:paddingBottom="5dp"
                 android:paddingTop="5dp"
-                android:text="Button" />
+                android:text="♥ Abra quando terminar de explorar o app!"
+                android:textAppearance="@style/TextAppearance.AppCompat"
+                android:textSize="18sp" />
         </LinearLayout>
     </ScrollView>
 </android.support.constraint.ConstraintLayout>
