@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="@drawable/bordasalert"
+    android:padding="24dp">
+
+    <TextView
+        android:id="@+id/txtNomeMusica"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Músicas que quando escuto me lembram vc!"
+        android:textSize="18sp"
+        android:textColor="#573457"
+        android:layout_marginBottom="16dp" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnPlayPause"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="⏸ Pausar"
+            android:layout_marginEnd="12dp" />
+
+        <Button
+            android:id="@+id/btnPararMusica"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="⏹ Parar" />
+
+    </LinearLayout>
+
+</LinearLayout>

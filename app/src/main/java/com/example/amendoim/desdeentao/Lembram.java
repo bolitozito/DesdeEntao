@@ -10,6 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.media.MediaPlayer;
+import android.app.AlertDialog;
+import android.widget.Button;
 
 import org.w3c.dom.Text;
 

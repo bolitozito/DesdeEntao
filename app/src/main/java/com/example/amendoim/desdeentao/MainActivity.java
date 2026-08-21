@@ -12,6 +12,7 @@ import android.support.v4.app.Fragment;
 
 public class MainActivity extends AppCompatActivity {
 
+    private int posicaoAtual = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,30 +24,73 @@ public class MainActivity extends AppCompatActivity {
         LinearLayout momentos = (LinearLayout) findViewById(R.id.navMomentos);
         LinearLayout cartinhas = (LinearLayout) findViewById(R.id.navCartas);
 
-        trocarFragment(new Home());
+        trocarFragment(new Home(), 0);
 
         Home.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                trocarFragment(new Home());
+                trocarFragment(new Home(), 0);
             }
         });
 
         lembram.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                trocarFragment(new Lembram());
+                trocarFragment(new Lembram(), 1);
             }
         });
 
-    } // ← O onCreate termina AQUI
+        // AINDA NÃO EXISTE - descomenta quando criar a classe Momentos (Fragment)
+        /*
+        momentos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                trocarFragment(new Momentos(), 2);
+            }
+        });
+        */
 
-    public void trocarFragment(Fragment fragment) {
+        // AINDA NÃO EXISTE - descomenta quando criar a classe Cartinhas (Fragment)
+        /*
+        cartinhas.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                trocarFragment(new Cartinhas(), 3);
+            }
+        });
+        */
 
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.container, fragment)
-                .commit();
+    }
 
+    public void trocarFragment(Fragment fragment, int novaPosicao) {
+
+        if (novaPosicao > posicaoAtual) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .setCustomAnimations(
+                            R.anim.slide_in_right,
+                            R.anim.slide_out_left
+                    )
+                    .replace(R.id.container, fragment)
+                    .commit();
+
+        } else if (novaPosicao < posicaoAtual) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .setCustomAnimations(
+                            R.anim.slide_in_left,
+                            R.anim.slide_out_right
+                    )
+                    .replace(R.id.container, fragment)
+                    .commit();
+
+        } else {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.container, fragment)
+                    .commit();
+        }
+
+        posicaoAtual = novaPosicao;
     }
 }

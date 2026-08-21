@@ -44,4 +44,13 @@
         app:layout_constraintRight_toRightOf="@+id/imageView11"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageView
+        android:id="@+id/imgMusica"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/ic_music"
+        android:contentDescription="Tocar música"
+        tools:layout_editor_absoluteY="258dp"
+        tools:layout_editor_absoluteX="59dp" />
+
 </android.support.constraint.ConstraintLayout>
