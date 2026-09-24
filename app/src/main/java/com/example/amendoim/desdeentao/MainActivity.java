@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
         LinearLayout Home = (LinearLayout) findViewById(R.id.navHome);
         LinearLayout lembram = (LinearLayout) findViewById(R.id.navLembram);
         LinearLayout momentos = (LinearLayout) findViewById(R.id.navMomentos);
-        LinearLayout cartinhas = (LinearLayout) findViewById(R.id.navCartas);
+        LinearLayout jogo = (LinearLayout) findViewById(R.id.navJogo);
 
         trocarFragment(new Home(), 0);
 
@@ -40,22 +40,19 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        jogo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                trocarFragment(new JogoFragment(), 3);
+            }
+        });
+
         // AINDA NÃO EXISTE - descomenta quando criar a classe Momentos (Fragment)
         /*
         momentos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 trocarFragment(new Momentos(), 2);
-            }
-        });
-        */
-
-        // AINDA NÃO EXISTE - descomenta quando criar a classe Cartinhas (Fragment)
-        /*
-        cartinhas.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                trocarFragment(new Cartinhas(), 3);
             }
         });
         */
