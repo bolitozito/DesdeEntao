@@ -1,12 +1,11 @@
 package com.example.amendoim.desdeentao;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.RectF;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -18,9 +17,9 @@ public class BulletHellView extends View {
 
     private Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
-    // =========================
+    // ==========================================
     // JOGADOR
-    // =========================
+    // ==========================================
 
     private float playerX;
     private float playerY;
@@ -28,9 +27,9 @@ public class BulletHellView extends View {
     private float playerRadius = 20;
 
 
-    // =========================
+    // ==========================================
     // BOSS
-    // =========================
+    // ==========================================
 
     private float enemyX;
     private float enemyY;
@@ -38,172 +37,190 @@ public class BulletHellView extends View {
     private float enemyRadius = 200;
 
     private float enemySpeed = 3;
-
-    // 1 = direita
-    // -1 = esquerda
     private int enemyDirection = 1;
 
     private Bitmap enemyImage;
 
 
-    // =========================
+    // ==========================================
     // PROJÉTEIS
-    // =========================
+    // ==========================================
 
-    private ArrayList<Bullet> bullets =
-            new ArrayList<>();
+    private ArrayList<Bullet> bullets = new ArrayList<>();
 
-    private Random random =
-            new Random();
+    private Random random = new Random();
 
-
-    // =========================
-    // IMAGENS DOS PROJÉTEIS
-    // =========================
-
-    private Bitmap[] imagensBalas = {
-
-            BitmapFactory.decodeResource(
-                    getResources(),
-                    R.drawable.bala_amarela
-            ),
-
-            BitmapFactory.decodeResource(
-                    getResources(),
-                    R.drawable.bala_laranja
-            ),
-
-            BitmapFactory.decodeResource(
-                    getResources(),
-                    R.drawable.bala_azul
-            )
-
-    };
+    // Imagens das balas
+    private Bitmap[] imagensBalas;
 
 
-    // =========================
+    // ==========================================
     // PONTUAÇÃO
-    // =========================
+    // ==========================================
 
     private int score = 0;
 
 
-    // =========================
+    // ==========================================
     // VIDAS
-    // =========================
+    // ==========================================
 
     private int lives = 5;
 
 
-    // =========================
+    // ==========================================
     // CONTROLE DO JOGO
-    // =========================
+    // ==========================================
 
     private boolean gameOver = false;
 
-
-    // =========================
-    // TEMPO DOS TIROS
-    // =========================
-
     private long lastShotTime = 0;
 
+    private long tempoInicio = 0;
 
-    // =========================
+    private int nivel = 1;
+
+
+    // ==========================================
     // CONSTRUTOR
-    // =========================
+    // ==========================================
 
     public BulletHellView(Context context) {
-
         super(context);
 
         paint.setAntiAlias(true);
 
-
-        // IMAGEM DA BOSS
-
+        // Imagem do boss
         enemyImage = BitmapFactory.decodeResource(
                 getResources(),
                 R.drawable.eminhadomal
         );
+
+        // Imagens das balas
+        imagensBalas = new Bitmap[] {
+
+                BitmapFactory.decodeResource(
+                        getResources(),
+                        R.drawable.bala_amarela
+                ),
+
+                BitmapFactory.decodeResource(
+                        getResources(),
+                        R.drawable.bala_laranja
+                ),
+
+                BitmapFactory.decodeResource(
+                        getResources(),
+                        R.drawable.bala_azul
+                )
+        };
+
+        // Começa a contar o tempo do jogo
+        tempoInicio = System.currentTimeMillis();
+
+        // Deixa a View transparente
+        setBackgroundColor(Color.TRANSPARENT);
     }
 
 
-    // =========================
-    // DESENHAR
-    // =========================
+    // ==========================================
+    // DESENHAR O JOGO
+    // ==========================================
 
     @Override
     protected void onDraw(Canvas canvas) {
 
         super.onDraw(canvas);
 
+        // Não pinta o fundo de preto
+        canvas.drawColor(Color.TRANSPARENT);
 
-        // =========================
-        // JOGADOR
-        // =========================
 
-        if (playerX == 0 &&
-                playerY == 0) {
+        // ==========================================
+        // POSIÇÃO INICIAL DO JOGADOR
+        // ==========================================
+
+        if (playerX == 0 && playerY == 0) {
 
             playerX = getWidth() / 2f;
 
-            playerY =
-                    getHeight() - 120;
+            playerY = getHeight() - 120;
         }
 
 
-        // =========================
-        // POSIÇÃO DA BOSS
-        // =========================
+        // ==========================================
+        // POSIÇÃO INICIAL DO BOSS
+        // ==========================================
 
         if (enemyX == 0) {
 
-            enemyX =
-                    getWidth() / 2f;
-        }
+            enemyX = getWidth() / 2f;
 
-        enemyY =
-                getHeight() / 2f - 80;
-
-
-        // =========================
-        // MOVIMENTO DA BOSS
-        // =========================
-
-        enemyX +=
-                enemySpeed * enemyDirection;
-
-
-        // Impede a boss de sair da tela
-
-        if (enemyX + enemyRadius >
-                getWidth()) {
-
-            enemyX =
-                    getWidth() - enemyRadius;
-
-            enemyDirection = -1;
+            enemyY = getHeight() / 2f - 50;
         }
 
 
+        // ==========================================
+        // SE O JOGO ACABOU
+        // ==========================================
+
+        if (gameOver) {
+
+            desenharGameOver(canvas);
+
+            return;
+        }
+
+
+        // ==========================================
+        // CALCULAR NÍVEL
+        // ==========================================
+
+        long tempoAtual = System.currentTimeMillis();
+
+        long tempoPassado =
+                tempoAtual - tempoInicio;
+
+
+        // A cada 10 segundos aumenta 1 nível
+        nivel = 1 + (int) (tempoPassado / 10000);
+
+
+        // ==========================================
+        // MOVIMENTO DO BOSS
+        // ==========================================
+
+        enemyX += enemySpeed * enemyDirection;
+
+
+        // Limite esquerdo
         if (enemyX - enemyRadius < 0) {
 
-            enemyX =
-                    enemyRadius;
+            enemyX = enemyRadius;
 
             enemyDirection = 1;
         }
 
 
-        // =========================
+        // Limite direito
+        if (enemyX + enemyRadius > getWidth()) {
+
+            enemyX = getWidth() - enemyRadius;
+
+            enemyDirection = -1;
+        }
+
+
+        // ==========================================
         // DESENHAR BOSS
-        // =========================
+        // ==========================================
 
         if (enemyImage != null) {
 
-            RectF destino =
-                    new RectF(
+            float tamanho = enemyRadius * 2;
+
+            android.graphics.RectF destino =
+                    new android.graphics.RectF(
                             enemyX - enemyRadius,
                             enemyY - enemyRadius,
                             enemyX + enemyRadius,
@@ -216,25 +233,12 @@ public class BulletHellView extends View {
                     destino,
                     paint
             );
-
-        } else {
-
-            paint.setColor(
-                    Color.rgb(180, 80, 180)
-            );
-
-            canvas.drawCircle(
-                    enemyX,
-                    enemyY,
-                    enemyRadius,
-                    paint
-            );
         }
 
 
-        // =========================
-        // JOGADOR
-        // =========================
+        // ==========================================
+        // DESENHAR JOGADOR
+        // ==========================================
 
         paint.setColor(Color.WHITE);
 
@@ -246,44 +250,66 @@ public class BulletHellView extends View {
         );
 
 
-        // =========================
-        // PROJÉTEIS
-        // =========================
+        // ==========================================
+        // CRIAR PROJÉTEIS
+        // ==========================================
+
+        // Quanto maior o nível,
+        // menor o intervalo entre as balas.
+
+        long intervalo = Math.max(
+                50,
+                180 - (nivel * 15)
+        );
+
+
+        if (System.currentTimeMillis() - lastShotTime
+                > intervalo) {
+
+            criarProjetil();
+
+            lastShotTime =
+                    System.currentTimeMillis();
+        }
+
+
+        // ==========================================
+        // ATUALIZAR PROJÉTEIS
+        // ==========================================
 
         Iterator<Bullet> iterator =
                 bullets.iterator();
 
+
         while (iterator.hasNext()) {
 
-            Bullet bullet =
-                    iterator.next();
+            Bullet bullet = iterator.next();
 
 
-            // Movimento
+            // Movimento da bala
+            bullet.x += bullet.speedX;
 
-            bullet.x +=
-                    bullet.speedX;
-
-            bullet.y +=
-                    bullet.speedY;
+            bullet.y += bullet.speedY;
 
 
-            // =========================
-            // DESENHAR IMAGEM DA BALA
-            // =========================
+            // ======================================
+            // DESENHAR BALA
+            // ======================================
 
             if (bullet.image != null) {
 
                 float tamanho =
                         bullet.radius * 2;
 
-                RectF destino =
-                        new RectF(
+
+                android.graphics.RectF destino =
+                        new android.graphics.RectF(
                                 bullet.x - bullet.radius,
                                 bullet.y - bullet.radius,
                                 bullet.x + bullet.radius,
                                 bullet.y + bullet.radius
                         );
+
 
                 canvas.drawBitmap(
                         bullet.image,
@@ -294,11 +320,10 @@ public class BulletHellView extends View {
 
             } else {
 
-                // Caso não tenha imagem
+                // Caso a imagem não exista,
+                // desenha uma bolinha.
 
-                paint.setColor(
-                        bullet.color
-                );
+                paint.setColor(bullet.color);
 
                 canvas.drawCircle(
                         bullet.x,
@@ -309,201 +334,168 @@ public class BulletHellView extends View {
             }
 
 
-            // =========================
-            // COLISÃO
-            // =========================
+            // ======================================
+            // COLISÃO COM O JOGADOR
+            // ======================================
 
-            float distanciaX =
+            float dx =
                     bullet.x - playerX;
 
-            float distanciaY =
+            float dy =
                     bullet.y - playerY;
+
 
             float distancia =
                     (float) Math.sqrt(
-                            distanciaX * distanciaX +
-                                    distanciaY * distanciaY
+                            dx * dx + dy * dy
                     );
 
 
             if (distancia <
-                    bullet.radius +
-                            playerRadius) {
+                    bullet.radius + playerRadius) {
 
                 lives--;
 
                 iterator.remove();
 
 
+                // Se acabou as vidas
                 if (lives <= 0) {
 
                     gameOver = true;
                 }
-
-                continue;
             }
 
 
-            // =========================
-            // REMOVER BALA
-            // =========================
+            // ======================================
+            // REMOVER BALA FORA DA TELA
+            // ======================================
 
             if (bullet.x < -100 ||
-                    bullet.x >
-                            getWidth() + 100 ||
+                    bullet.x > getWidth() + 100 ||
                     bullet.y < -100 ||
-                    bullet.y >
-                            getHeight() + 100) {
+                    bullet.y > getHeight() + 100) {
 
                 iterator.remove();
             }
         }
 
 
-        // =========================
-        // CRIAR PROJÉTEIS
-        // =========================
+        // ==========================================
+        // HUD
+        // ==========================================
 
-        long agora =
-                System.currentTimeMillis();
-
-
-        if (!gameOver &&
-                agora - lastShotTime > 120) {
-
-            criarProjetil();
-
-            lastShotTime =
-                    agora;
-        }
+        desenharHUD(canvas);
 
 
-        // =========================
-        // PONTUAÇÃO
-        // =========================
+        // ==========================================
+        // CONTINUAR ANIMANDO
+        // ==========================================
 
-        paint.setColor(Color.WHITE);
-
-        paint.setTextSize(45);
-
-        canvas.drawText(
-                "Pontos: " + score,
-                30,
-                60,
-                paint
-        );
-
-
-        // =========================
-        // VIDAS
-        // =========================
-
-        canvas.drawText(
-                "Vidas: " + lives,
-                30,
-                110,
-                paint
-        );
-
-
-        // =========================
-        // GAME OVER
-        // =========================
-
-        if (gameOver) {
-
-            paint.setColor(Color.WHITE);
-
-            paint.setTextSize(65);
-
-            paint.setTextAlign(
-                    Paint.Align.CENTER
-            );
-
-
-            canvas.drawText(
-                    "GAME OVER",
-                    getWidth() / 2f,
-                    getHeight() / 2f,
-                    paint
-            );
-
-
-            paint.setTextSize(35);
-
-
-            canvas.drawText(
-                    "Toque para jogar novamente",
-                    getWidth() / 2f,
-                    getHeight() / 2f + 60,
-                    paint
-            );
-
-
-            paint.setTextAlign(
-                    Paint.Align.LEFT
-            );
-        }
-
-
-        // Continua o jogo
-
-        if (!gameOver) {
-
-            invalidate();
-        }
+        invalidate();
     }
 
 
-    // =========================
+    // ==========================================
     // CRIAR PROJÉTIL
-    // =========================
+    // ==========================================
 
     private void criarProjetil() {
 
 
-        // =========================
+        // ==========================================
         // DIREÇÃO ALEATÓRIA
-        // =========================
+        // ==========================================
 
         double angulo =
                 random.nextDouble()
-                        * Math.PI * 2;
+                        * Math.PI
+                        * 2;
 
 
-        // Velocidade
+        // ==========================================
+        // VELOCIDADE
+        // ==========================================
 
         float velocidade =
-                4 + random.nextFloat() * 3;
+                4
+                        + random.nextFloat() * 3
+                        + (nivel * 0.5f);
 
 
         float velocidadeX =
-                (float)
-                        Math.cos(angulo)
+                (float) Math.cos(angulo)
                         * velocidade;
 
 
         float velocidadeY =
-                (float)
-                        Math.sin(angulo)
+                (float) Math.sin(angulo)
                         * velocidade;
 
 
-        // =========================
-        // ESCOLHER IMAGEM
-        // =========================
+        // ==========================================
+        // ESCOLHER IMAGEM ALEATÓRIA
+        // ==========================================
 
-        Bitmap imagem =
-                imagensBalas[
+        Bitmap imagem = null;
+
+
+        if (imagensBalas != null &&
+                imagensBalas.length > 0) {
+
+            imagem =
+                    imagensBalas[
+                            random.nextInt(
+                                    imagensBalas.length
+                            )
+                            ];
+        }
+
+
+        // ==========================================
+        // CORES
+        // ==========================================
+
+        int[] cores = {
+
+                Color.YELLOW,
+
+                Color.rgb(
+                        255,
+                        140,
+                        0
+                ),
+
+                Color.CYAN,
+
+                Color.BLUE,
+
+                Color.MAGENTA
+        };
+
+
+        int cor =
+                cores[
                         random.nextInt(
-                                imagensBalas.length
+                                cores.length
                         )
                         ];
 
 
-        // =========================
+        // ==========================================
+        // TAMANHO DA BALA
+        // ==========================================
+
+        // Começa grande e fica ainda maior
+        // conforme o nível aumenta.
+
+        float tamanho =
+                28 + (nivel * 0.5f);
+
+
+        // ==========================================
         // CRIAR BALA
-        // =========================
+        // ==========================================
 
         Bullet bullet =
                 new Bullet(
@@ -511,6 +503,8 @@ public class BulletHellView extends View {
                         enemyY,
                         velocidadeX,
                         velocidadeY,
+                        tamanho,
+                        cor,
                         imagem
                 );
 
@@ -518,40 +512,178 @@ public class BulletHellView extends View {
         bullets.add(bullet);
 
 
+        // Pontuação
         score++;
     }
 
 
-    // =========================
-    // CONTROLE DO DEDO
-    // =========================
+    // ==========================================
+    // DESENHAR HUD
+    // ==========================================
+
+    private void desenharHUD(Canvas canvas) {
+
+
+        paint.setColor(Color.WHITE);
+
+        paint.setTextSize(32);
+
+        paint.setTypeface(
+                android.graphics.Typeface.DEFAULT_BOLD
+        );
+
+
+        // Vidas
+        canvas.drawText(
+                "❤ " + lives,
+                25,
+                45,
+                paint
+        );
+
+
+        // Pontuação
+        canvas.drawText(
+                "Pontos: " + score,
+                25,
+                85,
+                paint
+        );
+
+
+        // Nível
+        canvas.drawText(
+                "Nível: " + nivel,
+                25,
+                125,
+                paint
+        );
+    }
+
+
+    // ==========================================
+    // GAME OVER
+    // ==========================================
+
+    private void desenharGameOver(Canvas canvas) {
+
+
+        // Fundo escuro transparente
+        paint.setColor(
+                Color.argb(
+                        180,
+                        0,
+                        0,
+                        0
+                )
+        );
+
+
+        canvas.drawRect(
+                0,
+                0,
+                getWidth(),
+                getHeight(),
+                paint
+        );
+
+
+        // Texto principal
+        paint.setColor(Color.WHITE);
+
+        paint.setTextSize(60);
+
+        paint.setTypeface(
+                android.graphics.Typeface.DEFAULT_BOLD
+        );
+
+
+        String texto =
+                "GAME OVER";
+
+
+        float largura =
+                paint.measureText(texto);
+
+
+        canvas.drawText(
+                texto,
+                (getWidth() - largura) / 2,
+                getHeight() / 2f,
+                paint
+        );
+
+
+        // Pontuação
+        paint.setTextSize(30);
+
+
+        String pontos =
+                "Pontos: " + score;
+
+
+        float larguraPontos =
+                paint.measureText(pontos);
+
+
+        canvas.drawText(
+                pontos,
+                (getWidth() - larguraPontos) / 2,
+                getHeight() / 2f + 55,
+                paint
+        );
+
+
+        // Mensagem
+        paint.setTextSize(25);
+
+
+        String mensagem =
+                "Toque para tentar novamente";
+
+
+        float larguraMensagem =
+                paint.measureText(mensagem);
+
+
+        canvas.drawText(
+                mensagem,
+                (getWidth() - larguraMensagem) / 2,
+                getHeight() / 2f + 105,
+                paint
+        );
+    }
+
+
+    // ==========================================
+    // TOQUE NA TELA
+    // ==========================================
 
     @Override
-    public boolean onTouchEvent(
-            MotionEvent event) {
+    public boolean onTouchEvent(MotionEvent event) {
 
 
-        // Reiniciar
+        // ==========================================
+        // GAME OVER
+        // ==========================================
 
-        if (gameOver &&
-                event.getAction() ==
-                        MotionEvent.ACTION_DOWN) {
+        if (gameOver) {
 
-            lives = 5;
+            if (event.getAction() ==
+                    MotionEvent.ACTION_DOWN) {
 
-            score = 0;
+                reiniciarJogo();
 
-            bullets.clear();
-
-            gameOver = false;
-
-            invalidate();
+                return true;
+            }
 
             return true;
         }
 
 
-        // Movimento
+        // ==========================================
+        // MOVIMENTO DO JOGADOR
+        // ==========================================
 
         if (event.getAction() ==
                 MotionEvent.ACTION_DOWN ||
@@ -562,11 +694,42 @@ public class BulletHellView extends View {
             playerX =
                     event.getX();
 
+
             playerY =
                     event.getY();
 
 
-            invalidate();
+            // Impedir jogador de sair da tela
+
+            if (playerX < playerRadius) {
+
+                playerX =
+                        playerRadius;
+            }
+
+
+            if (playerX >
+                    getWidth() - playerRadius) {
+
+                playerX =
+                        getWidth() - playerRadius;
+            }
+
+
+            if (playerY < playerRadius) {
+
+                playerY =
+                        playerRadius;
+            }
+
+
+            if (playerY >
+                    getHeight() - playerRadius) {
+
+                playerY =
+                        getHeight() - playerRadius;
+            }
+
 
             return true;
         }
@@ -576,21 +739,76 @@ public class BulletHellView extends View {
     }
 
 
-    // =========================
+    // ==========================================
+    // REINICIAR
+    // ==========================================
+
+    private void reiniciarJogo() {
+
+
+        bullets.clear();
+
+
+        score = 0;
+
+
+        lives = 5;
+
+
+        nivel = 1;
+
+
+        gameOver = false;
+
+
+        tempoInicio =
+                System.currentTimeMillis();
+
+
+        lastShotTime = 0;
+
+
+        playerX =
+                getWidth() / 2f;
+
+
+        playerY =
+                getHeight() - 120;
+
+
+        enemyX =
+                getWidth() / 2f;
+
+
+        enemyDirection = 1;
+
+
+        invalidate();
+    }
+
+
+    // ==========================================
     // CLASSE DA BALA
-    // =========================
+    // ==========================================
 
     private static class Bullet {
 
+
         float x;
+
         float y;
 
+
         float speedX;
+
         float speedY;
 
-        float radius = 18;
+
+        float radius = 1000;
+
 
         int color;
+
 
         Bitmap image;
 
@@ -600,24 +818,25 @@ public class BulletHellView extends View {
                 float y,
                 float speedX,
                 float speedY,
+                float radius,
+                int color,
                 Bitmap image
         ) {
 
+
             this.x = x;
+
             this.y = y;
 
-            this.speedX =
-                    speedX;
+            this.speedX = speedX;
 
-            this.speedY =
-                    speedY;
+            this.speedY = speedY;
 
-            this.image =
-                    image;
+            this.radius = radius;
 
+            this.color = color;
 
-            this.color =
-                    Color.YELLOW;
+            this.image = image;
         }
     }
 }
